@@ -32,8 +32,17 @@ def get_csvs_df(path):
         raise RuntimeError(f"No CSV files found in provided data path: {path}")
     return pd.concat((pd.read_csv(f) for f in csv_files), sort=False)
 
+def process_data(df):
+    # split dataframe into X and y
+    X, y = df[['Pregnancies', 'PlasmaGlucose', 'DiastolicBloodPressure',
+               'TricepsThickness', 'SerumInsulin', 'BMI', 'DiabetesPedigree',
+               'Age']].values, df['Diabetic'].values
 
-# TO DO: add function to split data
+    # train/test split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+
+    # return splits and encoder
+    return X_train, X_test, y_train, y_test
 
 
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
